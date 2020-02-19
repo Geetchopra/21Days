@@ -1,5 +1,5 @@
 # 21 Days
-An escape the maze game where time is money, literally!
+An escape the maze game where time is money, literally! Every action you take in this game, including walking, costs time, and you have 21 days to get out of a never ending house with lots of interesting secrets!
 
 This project is in its **early development** phase. It currently includes working scripts for the various gameplay ingredients and features. You can read the scripts to learn more about their functionality! 
 
