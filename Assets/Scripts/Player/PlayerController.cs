@@ -19,8 +19,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-
-        //Initialize sprint speed to be twice the walking speed set by the editor.
         sprintSpeed = walkSpeed * 2.0f;
     }
 
@@ -33,32 +31,27 @@ public class PlayerController : MonoBehaviour
         //Set the move speed based on whether the player is sprinting or not.
         moveSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
         
-        //Calculate move direction, update move speed (if needed) and move player based on respective keybind. 
         //Independent if's enable multiple inputs and diagonal movement.
-
-        //Forward
+        
         if (Input.GetKey(KeyCode.W))
         {
             direction = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
             controller.Move(direction * Time.deltaTime * moveSpeed);
         }
-
-        //Backward
+        
         if (Input.GetKey(KeyCode.S))
         {
             direction = new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z);
             controller.Move(direction * Time.deltaTime * moveSpeed);
         }
-
-        //Left
+        
         if (Input.GetKey(KeyCode.D))
         {
             direction = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
             moveSpeed /= 2.0f;
             controller.Move(direction * Time.deltaTime * moveSpeed);
         }
-
-        //Right
+        
         if (Input.GetKey(KeyCode.A))
         {
             direction = new Vector3(-Camera.main.transform.right.x, 0, -Camera.main.transform.right.z);

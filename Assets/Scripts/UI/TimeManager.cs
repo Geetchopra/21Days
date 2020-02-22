@@ -178,8 +178,7 @@ public class TimeManager : MonoBehaviour
         hours = new_time.Item2;
         minutes = new_time.Item3;
         seconds = new_time.Item4;
-
-        //Update visually.
+        
         SetTime();
     }
 
