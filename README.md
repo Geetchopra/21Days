@@ -1,6 +1,6 @@
 # 21 Days
-An escape the maze game where time is money, literally! Every action you take in this game, including walking, costs time, and you have 21 days to get out of a never ending house with lots of interesting secrets to unfold along the way!
+21 Days is an escape the maze type of puzzle game which includes a grotesque / horror theme to it. You are trapped in a never ending house (maze), and you have 21 Days to find your way out of it. There are extraterrestrial beings wandering around in the house and you have to sneak around them in order to escape the house. There are also some items that may help you deal with these beings by stunning them or damaging them etc.
 
-This project is in its **early development** phase. It currently includes working scripts for the various gameplay ingredients and features. You can read the scripts to learn more about their functionality! 
+What makes this game unique is that, in this game, **time is money**. Literally! Every action in this game, including walking, costs time and the more actions you take, the lesser amount of time you have to escape the maze. In other words, you really have 21 days to escape the house!
 
-There is also a sample scene present which showcases some of the gameplay elements with dummy objects. The first level for the game is currently being designed.
+This project is in its **early development** phase, and currently includes a sample scene with blocks to showcase some of the mechanics and gameplay elements I have coded in the game, including walking, running, picking and throwing items, finding keys and using them to unlock doors, AI idle and chasing mechanics, and the effect certain items have on them. I am currently working on the design scheme and the tutorial level for this game. You can expect to see a level and UI design in this game very soon!
