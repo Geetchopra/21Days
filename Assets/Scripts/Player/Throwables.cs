@@ -100,7 +100,6 @@ public class Throwables : MonoBehaviour
         text.gameObject.SetActive(displayState);
     }
 
-
     /// <summary>
     /// Instantiate a new object of currentType and add a force to it.
     /// </summary>
@@ -114,5 +113,7 @@ public class Throwables : MonoBehaviour
 
         PlayerItems.Unequip("throwable", currentType);
         text.text = currentType + ": " + PlayerItems.GetThrowableCount(currentType);
+
+        TimeManager.ChangeTime(10, 'h', "subtract");
     }
 }
