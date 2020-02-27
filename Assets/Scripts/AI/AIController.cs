@@ -29,17 +29,13 @@ public class AIController : MonoBehaviour
     //To ensure synchronization of coroutines.
     private bool coroutines;
 
-    void Awake()
-    {
-        player = GameObject.Find("Player");
-    }
-
     /// <summary>
     /// Initialize private attributes of the AI.
     /// </summary>
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        player = GameObject.Find("Player");
         walking = true;
         chasing = false;
         time = 0.0f;
@@ -48,7 +44,7 @@ public class AIController : MonoBehaviour
     }
 
     /// <summary>
-    /// FixedUpdate - Called once or multiple times every frame.
+    /// FixedUpdate - Called every fixed rate frame.
     /// Contains logic to walk between waypoints and chase the player if the player is seen.
     /// </summary>
     void FixedUpdate()
