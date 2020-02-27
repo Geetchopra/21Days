@@ -66,11 +66,13 @@ public class InventoryKeys: MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             MoveCamera.DisableInput();
+            Time.timeScale = 0f;
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             MoveCamera.EnableInput();
+            Time.timeScale = 1f;
         }
     }
 
