@@ -47,7 +47,7 @@ public class MoveCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// Enable camera movement. Generally called after disable_input() to re-enable camera movement.
+    /// Enable camera movement. Generally called after DisableInput() to re-enable camera movement.
     /// </summary>
     public static void EnableInput()
     {
