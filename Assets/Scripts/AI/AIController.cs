@@ -54,7 +54,7 @@ public class AIController : MonoBehaviour
     void FixedUpdate()
     {
         //Walk between the waypoints defined above when in the walking / idle state.
-        if (walking)
+        if (walking && !coroutines)
         {
             Walk();    
         }
@@ -78,7 +78,7 @@ public class AIController : MonoBehaviour
         //If the enemy sees the player, then chase him.
         if (chasing && !coroutines)
         {
-            StartTimer();
+            time += Time.deltaTime;
             transform.LookAt(player.transform);
             Move(player.transform.position);
         }
@@ -174,14 +174,6 @@ public class AIController : MonoBehaviour
     {
         agent.isStopped = false;
         agent.SetDestination(position);
-    }
-
-    /// <summary>
-    /// Initiate a timer for the player to check for certain events.
-    /// </summary>
-    void StartTimer()
-    {
-        time += Time.deltaTime;
     }
 
     /// <summary>
