@@ -33,7 +33,7 @@ public class MoveCamera : MonoBehaviour
         if (inputEnabled)
         {
             yaw += sensH * Input.GetAxis("Mouse X");
-            pitch -= sensV * Input.GetAxis("Mouse Y");
+            pitch = Mathf.Clamp(pitch - (sensV * Input.GetAxis("Mouse Y")), -72f, 72f);
             transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
         }       
     }
