@@ -15,13 +15,21 @@ public class Door : MonoBehaviour
     [SerializeField] private float promptDistance;
 
     //The prompt Text object.
-    [SerializeField] private Text prompt;
+    private Text prompt;
 
     //Integer cost amount.
     [SerializeField] private int costAmount;
 
     //Cost type (h - hours, m - minutes, d - days, s - seconds).
     [SerializeField] private char costType;
+
+    /// <summary>
+    /// Initialize objects in scene.
+    /// </summary>
+    void Awake()
+    {
+        prompt = GameObject.Find("Interactable Prompt").GetComponent<Text>();
+    }
 
     /// <summary>
     /// Update - Called every frame.
@@ -65,12 +73,12 @@ public class Door : MonoBehaviour
             prompt.text = "Press E to open door";
         }
         //If the player has the master key.
-        else if (PlayerItems.Find("keys", "master"))
+        else if (PlayerItems.Find("key", "master"))
         {
             prompt.text = "Use master key.\nPress E to open door";
         }
         //If the player has the door specific key.
-        else if (PlayerItems.Find("keys", KeyID))
+        else if (PlayerItems.Find("key", KeyID))
         {
             prompt.text = "Use " + KeyID + ".\nPress E to open door";
         }
