@@ -3,4 +3,6 @@
 
 What makes this game unique is that, in this game, **time is money**. Literally! Every action in this game, including walking, costs time and the more actions you take, the lesser amount of time you have to escape the maze. In other words, you really have 21 days to escape the house!
 
-This project is in its **early development** phase, and currently includes a sample scene with blocks to showcase some of the mechanics and gameplay elements I have coded in the game, including walking, running, picking and throwing items, finding keys and using them to unlock doors, AI idle and chasing mechanics, and the effect certain items have on them. I am currently working on the design scheme and the tutorial level for this game. You can expect to see a level and UI design in this game very soon!
+This project is in its **early development** phase, and currently includes a level blockmesh for the first / tutorial level of the game, which is also what I am currently working on. You can expect to see the complete level and a UI design in this game very soon!
+
+Check out my project board for this game on Milanote - https://app.milanote.com/1J8VM31jwg8adn
