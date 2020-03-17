@@ -28,12 +28,12 @@ public class MoveCamera : MonoBehaviour
     /// <summary>
     /// Enable camera movement when the mouse moves. Also supports changing the sensitivity of the camera.
     /// </summary>
-    void Update()
+    void LateUpdate()
     {
         if (inputEnabled)
         {
             yaw += sensH * Input.GetAxis("Mouse X");
-            pitch = Mathf.Clamp(pitch - (sensV * Input.GetAxis("Mouse Y")), -72f, 72f);
+            pitch = Mathf.Clamp(pitch - (sensV * Input.GetAxis("Mouse Y")), -72f, 60f);
             transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
         }       
     }

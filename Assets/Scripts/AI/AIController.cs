@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 /// <summary>
 /// The Enemy AI controller class. Contains logic to control the enemy movement and interactions.
@@ -17,7 +18,7 @@ public class AIController : MonoBehaviour
     //Describes the current state of the enemy.
     private bool walking;
     private bool chasing;
-
+    
     private GameObject player;
     private NavMeshAgent agent;
 
@@ -29,6 +30,8 @@ public class AIController : MonoBehaviour
     //To ensure synchronization of coroutines.
     private bool coroutines;
 
+    private Animator animator;
+
     /// <summary>
     /// Initialize private attributes of the AI.
     /// </summary>
@@ -36,19 +39,23 @@ public class AIController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player");
+        animator = GetComponent<Animator>();
         walking = true;
         chasing = false;
         time = 0.0f;
         currentWaypoint = 0;
         coroutines = false;
+        agent.updateRotation = false;
     }
-
+    
     /// <summary>
     /// FixedUpdate - Called every fixed rate frame.
     /// Contains logic to walk between waypoints and chase the player if the player is seen.
     /// </summary>
     void FixedUpdate()
     {
+        animator.SetFloat("speed", agent.speed * (agent.isStopped ? 0f : 1f));
+
         //Walk between the waypoints defined above when in the walking / idle state.
         if (walking && !coroutines)
         {
@@ -75,6 +82,7 @@ public class AIController : MonoBehaviour
         if (chasing && !coroutines)
         {
             time += Time.deltaTime;
+            agent.speed = 2f;
             transform.LookAt(player.transform);
             Move(player.transform.position);
         }
@@ -89,6 +97,7 @@ public class AIController : MonoBehaviour
                 ChangeState();
             }
         }
+
     }
 
     /// <summary>
@@ -99,13 +108,21 @@ public class AIController : MonoBehaviour
         Vector3 position = waypoints[currentWaypoint].transform.position;
 
         if (Vector3.Distance(transform.position, position) < 1f)
+        {
+            agent.speed = 0f;
             StartCoroutine(ChangeWaypoint());
+        }
+        else
+        {
+            //Ensure realism!
+            if (Vector3.Distance(transform.position, position) > 2f)
+                transform.LookAt(position);
 
-        //Ensure realism!
-        if (Vector3.Distance(transform.position, position) > 2f)
-            transform.LookAt(position);
+            agent.speed = 1f;
+            Move(position);
+        }
 
-        Move(position);
+        
     }
 
     /// <summary>
@@ -152,11 +169,13 @@ public class AIController : MonoBehaviour
         coroutines = true;
 
         Debug.Log("Stunned!");
+        animator.SetBool("stun", true);
         agent.isStopped = true;
 
         yield return new WaitForSeconds(5.0f);
 
         Debug.Log("Free");
+        animator.SetBool("stun", false);
         agent.isStopped = false;
 
         coroutines = false;

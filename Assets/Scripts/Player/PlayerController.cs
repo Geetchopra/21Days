@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-/// <summary>
-/// Simulates player movement using a Character Controller.
-/// </summary>
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float walkSpeed;
@@ -15,9 +12,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Animator animator;
 
-    /// <summary>
-    /// Start - Called before the first frame update.
-    /// </summary>
+    // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -25,44 +20,46 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    /// <summary>
-    /// Fixed Update - Called once or multiple times every frame.
-    /// Checks for key inputs and moves the player in the respective direction relative to the camera.
-    /// </summary>
+    // Update is called once per frame
     void FixedUpdate()
     {
-        animator.SetFloat("VSpeed", Input.GetAxis("Vertical"));
-        animator.SetFloat("HSpeed", Input.GetAxis("Horizontal"));
-
         //Set the move speed based on whether the player is sprinting or not.
         moveSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
-        
+
+        animator.SetFloat("velocityY", Input.GetAxis("Vertical") * (Input.GetKey(KeyCode.LeftShift) ? 2f : 1f));
+        animator.SetFloat("velocityX", Input.GetAxis("Horizontal") * (Input.GetKey(KeyCode.LeftShift) ? 2f : 1f));
+
         //Independent if's enable multiple inputs and diagonal movement.
-        
+        float offset;
+
         if (Input.GetKey(KeyCode.W))
         {
             direction = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
-            controller.Move(direction * Time.deltaTime * moveSpeed * Math.Abs(animator.GetFloat("VSpeed")));
+            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityY")), -1, 1);
+            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
         }
-        
+
         if (Input.GetKey(KeyCode.S))
         {
             direction = new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z);
-            controller.Move(direction * Time.deltaTime * moveSpeed * Math.Abs(animator.GetFloat("VSpeed")));
+            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityY")), -1, 1);
+            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
         }
-        
+
         if (Input.GetKey(KeyCode.D))
         {
             direction = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
             moveSpeed /= 2.0f;
-            controller.Move(direction * Time.deltaTime * moveSpeed * Math.Abs(animator.GetFloat("HSpeed")));
+            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityX")), -1, 1);
+            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
         }
-        
+
         if (Input.GetKey(KeyCode.A))
         {
             direction = new Vector3(-Camera.main.transform.right.x, 0, -Camera.main.transform.right.z);
             moveSpeed /= 2.0f;
-            controller.Move(direction * Time.deltaTime * moveSpeed * Math.Abs(animator.GetFloat("HSpeed")));
+            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityX")), -1, 1);
+            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
         }
 
         transform.forward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
