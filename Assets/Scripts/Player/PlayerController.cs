@@ -11,6 +11,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
     private CharacterController controller;
     private Animator animator;
+    private bool running;
+
+    private float rotation;
+    private Quaternion originalRotation;
+
+    [HideInInspector]
+    public enum MovementState { idle = 0, walking = 1, running = 2 };
+    [HideInInspector]
+    public MovementState state;
 
     // Start is called before the first frame update
     void Start()
@@ -18,50 +27,62 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         sprintSpeed = walkSpeed * 2.0f;
         animator = GetComponent<Animator>();
+
+        originalRotation = transform.localRotation;
+        rotation = 0f;
+
+        state = MovementState.idle;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        //Set the move speed based on whether the player is sprinting or not.
-        moveSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+        float inputX = Input.GetAxis("Horizontal");
+        float inputY = Input.GetAxis("Vertical");
 
-        animator.SetFloat("velocityY", Input.GetAxis("Vertical") * (Input.GetKey(KeyCode.LeftShift) ? 2f : 1f));
-        animator.SetFloat("velocityX", Input.GetAxis("Horizontal") * (Input.GetKey(KeyCode.LeftShift) ? 2f : 1f));
+        animator.SetFloat("velocityY", inputY * (running ? 2f : 1f));
+        animator.SetFloat("velocityX", inputX * (running ? 2f : 1f));
 
-        //Independent if's enable multiple inputs and diagonal movement.
-        float offset;
+        float inputOffset = (inputX != 0.0f) ? .7071f : 1.0f;
 
-        if (Input.GetKey(KeyCode.W))
+        direction = new Vector3(inputX * inputOffset, 0, inputY * inputOffset);
+        direction = transform.TransformDirection(direction) * moveSpeed;
+
+        controller.Move(direction * Time.fixedDeltaTime);
+    }
+
+    void Update()
+    {
+        running = Input.GetKey(KeyCode.LeftShift);
+
+        if (Mathf.Abs(direction.x) > 0.1f || Mathf.Abs(direction.z) > 0.1f) 
         {
-            direction = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
-            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityY")), -1, 1);
-            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
+            if (running)
+                state = MovementState.running;
+            else
+                state = MovementState.walking;
+        }
+        else
+        {
+            state = MovementState.idle;
         }
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            direction = new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z);
-            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityY")), -1, 1);
-            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
-        }
+        bool crouched = animator.GetBool("crouch");
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            direction = new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
+        //Reduce movement speed for crouching.
+        if (crouched)
             moveSpeed /= 2.0f;
-            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityX")), -1, 1);
-            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
-        }
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+            animator.SetBool("crouch", !crouched);
+        else
+            moveSpeed = running ? sprintSpeed : walkSpeed;
+
+        if (MoveCamera.inputEnabled)
         {
-            direction = new Vector3(-Camera.main.transform.right.x, 0, -Camera.main.transform.right.z);
-            moveSpeed /= 2.0f;
-            offset = Mathf.Clamp(Math.Abs(animator.GetFloat("velocityX")), -1, 1);
-            controller.Move(direction * Time.deltaTime * moveSpeed * offset);
+            rotation += Input.GetAxis("Mouse X") * MoveCamera.sensH;
+            Quaternion angle = Quaternion.AngleAxis(rotation, Vector3.up);
+            transform.localRotation = originalRotation * angle;
         }
-
-        transform.forward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
     }
 }

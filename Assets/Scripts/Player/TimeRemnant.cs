@@ -26,6 +26,7 @@ public class TimeRemnant : MonoBehaviour
         {
             GameObject remnant = Instantiate(timeRemnant, Camera.main.transform.position + Camera.main.transform.forward, Camera.main.transform.rotation);
             remnant.SetActive(true);
+            TimeManager.ChangeTime(5, TimeManager.Times.hours, TimeManager.Operations.subtract);
         }
     }
 }
