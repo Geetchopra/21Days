@@ -11,20 +11,8 @@ using UnityEngine;
 public class TimeCapsule : MonoBehaviour
 {
     [SerializeField] private int costAmount;
-    [SerializeField] private char costType;
-    [SerializeField] private string operation;
-
-    /// <summary>
-    /// Check if cost type and operation are initialized in the editor.
-    /// </summary>
-    void Start()
-    {
-        if (costType != 'd' && costType != 'h' && costType != 'm' && costType != 's')
-            throw new Exception("Error: Time type is not initialized correctly");
-
-        if (operation != "add" && operation != "subtract")
-            throw new Exception("Add_or_subtract not initialized correctly");
-    }
+    [SerializeField] private TimeManager.Times costType;
+    [SerializeField] private TimeManager.Operations operation;
 
     /// <summary>
     /// Add or subtract time if collided with the player.

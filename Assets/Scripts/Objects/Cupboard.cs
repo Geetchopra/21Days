@@ -12,8 +12,7 @@ public class Cupboard : MonoBehaviour
     //Integer cost amount.
     [SerializeField] private int costAmount = 30;
 
-    //Cost type (h - hours, m - minutes, d - days, s - seconds).
-    [SerializeField] private char costType = 'm';
+    [SerializeField] private TimeManager.Times costType = TimeManager.Times.minutes;
 
     private Animator animator;
 
@@ -74,7 +73,6 @@ public class Cupboard : MonoBehaviour
     {
         foreach(Transform obj in transform.parent)
         {
-            Debug.Log(obj.name);
             if (obj.name.Contains("Drawer"))
             {
                 Animator animator = obj.GetComponentInChildren<Animator>();
@@ -87,7 +85,7 @@ public class Cupboard : MonoBehaviour
 
     void Open(bool state)
     {
-        TimeManager.ChangeTime(costAmount, costType, "subtract");
+        TimeManager.ChangeTime(costAmount, costType, TimeManager.Operations.subtract);
         animator.SetBool("open", state);
         prompt.enabled = false;
     }

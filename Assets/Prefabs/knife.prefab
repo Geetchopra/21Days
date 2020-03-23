@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 6692742775970731973}
   - component: {fileID: 6692742775970731972}
   - component: {fileID: 6692742775970731969}
-  - component: {fileID: -8212202688990282970}
+  - component: {fileID: 7358705952671069142}
   m_Layer: 0
   m_Name: knife
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 6692742775970731979}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.86, y: 1.56, z: 6.39}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.20499, y: 0.20499, z: 0.20499}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a48ec687de153f4bb6cc0317a609240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8212202688990282970
+--- !u!114 &7358705952671069142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,11 +133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6692742775970731979}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75863eeba0b4f0441b5af90813a34642, type: 3}
+  m_Script: {fileID: 11500000, guid: 37218b365bec5ba44b7c84cd8fba2cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: throwable
-  itemID: knife
-  costAmount: 30
-  costType: 109
-  promptDistance: 3
+  throwable: {fileID: 11400000, guid: 1ec487136f32a774084840b3d0322625, type: 2}

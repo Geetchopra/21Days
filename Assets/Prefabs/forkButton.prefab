@@ -208,4 +208,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2073840912a57a409a58018aec8cb1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: fork
+  buttonType: Fork

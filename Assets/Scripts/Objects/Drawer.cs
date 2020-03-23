@@ -12,7 +12,7 @@ public class Drawer : MonoBehaviour
     [SerializeField] private int costAmount = 30;
 
     //Cost type (h - hours, m - minutes, d - days, s - seconds).
-    [SerializeField] private char costType = 'm';
+    [SerializeField] private TimeManager.Times costType = TimeManager.Times.minutes;
 
     private Animator animator;
 
@@ -32,7 +32,7 @@ public class Drawer : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, promptDistance) && !Cursor.visible)
         {
-            Debug.Log(hit.collider.gameObject.name);
+
             if (hit.collider.gameObject == gameObject)
             {
                 bool state = SetPrompt();
@@ -69,7 +69,7 @@ public class Drawer : MonoBehaviour
 
     void Open(bool state)
     {
-        TimeManager.ChangeTime(costAmount, costType, "subtract");
+        TimeManager.ChangeTime(costAmount, costType, TimeManager.Operations.subtract);
         animator.SetBool("open", state);
         prompt.enabled = false;
     }

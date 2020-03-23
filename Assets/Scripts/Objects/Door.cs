@@ -18,10 +18,9 @@ public class Door : MonoBehaviour
     private Text prompt;
 
     //Integer cost amount.
-    [SerializeField] private int costAmount;
+    [SerializeField] private int costAmount = 30;
 
-    //Cost type (h - hours, m - minutes, d - days, s - seconds).
-    [SerializeField] private char costType;
+    [SerializeField] private TimeManager.Times costType = TimeManager.Times.minutes;
 
     /// <summary>
     /// Initialize objects in scene.
@@ -99,7 +98,7 @@ public class Door : MonoBehaviour
     /// </summary>
     void Open()
     {
-        TimeManager.ChangeTime(costAmount, costType, "subtract");
+        TimeManager.ChangeTime(costAmount, costType, TimeManager.Operations.subtract);
         Destroy(gameObject);
     }
 }
