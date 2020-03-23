@@ -8,7 +8,7 @@ public class ThrowableManager : MonoBehaviour
     [SerializeField] private Throwable throwable;
     private Button button;
     private Text buttonText;
-    private Sprite image;
+    private Sprite sprite;
     public string Name
     {
         get
@@ -37,7 +37,7 @@ public class ThrowableManager : MonoBehaviour
 
     void Start()
     {
-        image = throwable.image;
+        sprite = throwable.sprite;
         prompt = GameObject.Find("Interactable Prompt").GetComponent<Text>();
     }
 
@@ -54,7 +54,7 @@ public class ThrowableManager : MonoBehaviour
     public void CreateButton()
     {
         button = Instantiate(throwable.button);
-        button.transform.parent = GameObject.Find("Inventory").transform;
+        button.transform.parent = GameObject.Find("Inventory/Throwables").transform;
         buttonText = button.GetComponentInChildren<Text>();
         UpdateButton();
     }
@@ -110,7 +110,6 @@ public class ThrowableManager : MonoBehaviour
     {
         TimeManager.ChangeTime(throwable.costAmount, throwable.costType, TimeManager.Operations.subtract);
         PlayerItems.Equip("throwable", throwable.name);
-        //gameObject.SetActive(false);
         Destroy(gameObject);
     }
 

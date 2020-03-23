@@ -18,5 +18,5 @@ public class Throwable : ScriptableObject
     public int costAmount;
     public TimeManager.Times costType;
     public Button button;
-    public Sprite image;
+    public Sprite sprite;
 }

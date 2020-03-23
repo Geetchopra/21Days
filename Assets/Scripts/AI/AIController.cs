@@ -19,7 +19,7 @@ public class AIController : MonoBehaviour
     private bool chasing;
     
     private GameObject player;
-    protected NavMeshAgent agent;
+    private NavMeshAgent agent;
 
     //To monitor the time passed during certain interactions.
     private float time;
@@ -29,7 +29,7 @@ public class AIController : MonoBehaviour
     //To ensure synchronization of coroutines.
     private bool coroutines;
 
-    protected Animator animator;
+    private Animator animator;
 
     private int health;
 
@@ -72,11 +72,10 @@ public class AIController : MonoBehaviour
         //Raycast to check if it hits the player within the triggerDistance.
         if (Physics.SphereCast(ray, 3.0f, out RaycastHit hit, triggerDistance))
         {
-            Debug.DrawRay(ray.origin, ray.direction * triggerDistance, Color.red);
             if (hit.collider.gameObject == player && !chasing)
             {
                 Debug.Log("Be Seeing You");
-                Debug.DrawRay(ray.origin, ray.direction * triggerDistance, Color.red);
+                //Debug.DrawRay(ray.origin, ray.direction * triggerDistance, Color.red);
                 ChangeState();
                 time = 0.0f;
             }

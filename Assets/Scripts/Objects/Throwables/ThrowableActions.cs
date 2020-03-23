@@ -8,7 +8,7 @@ public class ThrowableActions : MonoBehaviour
     private Text text;
 
     private ThrowableManager currentThrowable;
-    [SerializeField] private InventoryThrowables inventory;
+    [SerializeField] private Inventory inventory;
     [SerializeField] private Reticle reticle;
 
     private bool activated;

@@ -45,7 +45,6 @@ public class Reticle : MonoBehaviour
 
     public void SetActiveCrosshair(bool displayState)
     {
-        highlight.enabled = displayState;
         crosshair.enabled = displayState;
     }
 

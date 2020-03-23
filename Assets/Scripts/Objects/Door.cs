@@ -72,7 +72,7 @@ public class Door : MonoBehaviour
             prompt.text = "Press E to open door";
         }
         //If the player has the master key.
-        else if (PlayerItems.Find("key", "master"))
+        else if (PlayerItems.Find("key", "0"))
         {
             prompt.text = "Use master key.\nPress E to open door";
         }
