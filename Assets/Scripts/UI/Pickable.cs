@@ -12,7 +12,7 @@ public class Pickable : MonoBehaviour
     [SerializeField] private string itemType;
     [SerializeField] private string itemID;
     [SerializeField] private int costAmount;
-    [SerializeField] private char costType;
+    [SerializeField] private TimeManager.Times costType;
     private Text prompt;
     [SerializeField] private float promptDistance;
     
@@ -21,9 +21,6 @@ public class Pickable : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (costType != 'd' && costType != 'h' && costType != 'm' && costType != 's')
-            throw new Exception("Error: Time type is not initialized correctly");
-
         prompt = GameObject.Find("Interactable Prompt").GetComponent<Text>();
     }
 
@@ -64,7 +61,7 @@ public class Pickable : MonoBehaviour
     /// </summary>
     void PickUp()
     {
-        TimeManager.ChangeTime(costAmount, costType, "subtract");
+        TimeManager.ChangeTime(costAmount, costType, TimeManager.Operations.subtract);
         PlayerItems.Equip(itemType, itemID);
         Destroy(gameObject);
     }

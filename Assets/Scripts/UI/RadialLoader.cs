@@ -27,7 +27,7 @@ public class RadialLoader : MonoBehaviour
     /// <summary>
     /// Initialize UI objects and set activated to false. 
     /// </summary>
-    void Awake()
+    void Start()
     {
         text = GetComponentInChildren<Text>();
         loader = GetComponentInChildren<Image>();

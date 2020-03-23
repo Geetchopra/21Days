@@ -17,6 +17,9 @@ public class TimeManager : MonoBehaviour
     public static int days;
     private static Text time;
 
+    public enum Times { days = 0, hours = 1, minutes = 2, seconds = 3 };
+    public enum Operations { add = 0, subtract = 1 };
+
     /// <summary>
     /// Called before the first frame update.
     /// </summary>
@@ -84,7 +87,7 @@ public class TimeManager : MonoBehaviour
     /// <summary>
     /// Set the time text on the UI.
     /// </summary>
-    public static void SetTime()
+    private static void SetTime()
     {
         time.text = days.ToString("00") + "d:" + hours.ToString("00") + "h:" + minutes.ToString("00") + "m:" + (Mathf.Floor(seconds)).ToString("00") + "s";
     }
@@ -131,17 +134,17 @@ public class TimeManager : MonoBehaviour
     /// <param name="time"> The amount of seconds to convert from. </param>
     /// <param name="toType"> Type of conversion, d for days, h for hours and so on. </param>
     /// <returns> The converted time. </returns>
-    public static int ConvertSeconds(int time, char toType)
+    public static int ConvertSeconds(int time, Times toType)
     {
-        if (toType == 'd')
+        if (toType == Times.days)
         {
             return time * 86400;
         }
-        else if (toType == 'h')
+        else if (toType == Times.hours)
         {
             return time * 3600;
         }
-        else if (toType == 'm')
+        else if (toType == Times.minutes)
         {
             return time * 60;
         }
@@ -157,27 +160,27 @@ public class TimeManager : MonoBehaviour
     /// <param name="timeAmount"> Amount to be changed by. </param>
     /// <param name="type"> Type of amount, d for days, h for hours and so on. </param>
     /// <param name="operation"> To check if time is to be added or subtracted. </param>
-    public static void ChangeTime(int timeAmount, char type, string operation)
+    public static void ChangeTime(int timeAmount, Times type, Operations operation)
     {
-        int current_time = JoinTime();
+        int currentTime = JoinTime();
 
         //Convert time to only seconds and add to current time.
-        if (operation == "add")
+        if (operation == Operations.add)
         {
-            current_time += ConvertSeconds(timeAmount, type);
+            currentTime += ConvertSeconds(timeAmount, type);
         }
         else
         {
-            current_time -= ConvertSeconds(timeAmount, type);
+            currentTime -= ConvertSeconds(timeAmount, type);
         }
 
-        //Get new time and update it accordingly.
-        Tuple<int, int, int, float> new_time = SplitTime(current_time);
+        //Get new time and update it accordingly.u
+        Tuple<int, int, int, float> newTime = SplitTime(currentTime);
 
-        days = new_time.Item1;
-        hours = new_time.Item2;
-        minutes = new_time.Item3;
-        seconds = new_time.Item4;
+        days = newTime.Item1;
+        hours = newTime.Item2;
+        minutes = newTime.Item3;
+        seconds = newTime.Item4;
         
         SetTime();
     }
@@ -189,19 +192,19 @@ public class TimeManager : MonoBehaviour
     /// <param name="amount"> The amount of time. </param>
     /// <param name="type"> Type of amount, d for days, h for hours and so on. </param>
     /// <returns></returns>
-    public static string ParseTime(int amount, char type)
+    public static string ParseTime(int amount, Times type)
     {
         string parsed;
 
         switch (type)
         {
-            case 's': parsed = "Second";
+            case Times.days: parsed = "Second";
                 break;
-            case 'm': parsed = "Minute";
+            case Times.minutes: parsed = "Minute";
                 break;
-            case 'h': parsed = "Hour";
+            case Times.hours: parsed = "Hour";
                 break;
-            case 'd': parsed = "Day";
+            case Times.seconds: parsed = "Day";
                 break;
             default: throw new Exception("Wrong time type for parsing entered!");
         }

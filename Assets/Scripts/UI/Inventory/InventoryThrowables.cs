@@ -10,14 +10,7 @@ using System;
 public class InventoryThrowables : MonoBehaviour
 {
     //The throwable objects to be instantiated at runtime.
-    [SerializeField] private List<Throwable> throwables = new List<Throwable>();
-
-    private List<Throwable> throwablesInUse = new List<Throwable>();
-
-    private GameObject canvas;
-
-    //Controls the position of each button on the screen.
-    private float x, y;
+    [SerializeField] private List<ThrowableManager> throwables = new List<ThrowableManager>();
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -25,10 +18,6 @@ public class InventoryThrowables : MonoBehaviour
     void Start()
     {
         UpdateUI();
-        canvas = GameObject.Find("Canvas");
-
-        x = 0;
-        y = 0;
     }
 
     /// <summary>
@@ -53,9 +42,9 @@ public class InventoryThrowables : MonoBehaviour
     /// <param name="displayState"> The boolean parameter to set the display state to. </param>
     void SetActiveUI(bool displayState)
     {
-        foreach (Throwable throwable in throwablesInUse)
+        foreach (ThrowableManager throwable in throwables)
         {
-            throwable.button.gameObject.SetActive(displayState);
+            throwable.SetButtonActive(displayState);
         }
 
         //Enable the cursor.
@@ -79,56 +68,20 @@ public class InventoryThrowables : MonoBehaviour
     /// </summary>
     void UpdateUI()
     {
-        foreach (Throwable throwable in throwables)
+        foreach (ThrowableManager throwable in throwables)
         {
-            //If player already has / had the throwable, then just update the values for its button.
-            if (throwablesInUse.Exists(lambda => lambda.type.Equals(throwable.type)))
+            if (throwable.IsEquipped())
             {
-                int index = throwablesInUse.FindIndex(lambda => lambda.type.Equals(throwable.type));
-                int count = PlayerItems.GetThrowableCount(throwable.type);
-                if (throwablesInUse[index].count != count)
-                {
-                    throwablesInUse[index].count = count;
-                    throwablesInUse[index].button.GetComponentInChildren<Text>().text = throwable.type + ": " + count.ToString();
-                    if (count == 0)
-                    {
-                        throwablesInUse[index].button.enabled = false;
-                    }
-                    else
-                    {
-                        throwablesInUse[index].button.enabled = true;
-                    }
-                }
-            }
-            //Create a new button if the player found a new item.
-            else if (PlayerItems.Find("throwable", throwable.type))
-            {
-                Button button = Instantiate(throwable.button, canvas.transform, false);
-                button.enabled = true;
-                button.transform.position += new Vector3(100 * x, 10 * y, 0);
-                button.GetComponentInChildren<Text>().text = throwable.type + ": " + 1.ToString();
-                x += 1;
-                throwablesInUse.Add(new Throwable(throwable.type, 1, button));
+                if (throwable.IsDiscovered())
+                    throwable.UpdateButton();
+                else
+                    throwable.CreateButton();
             }
         }
     }
-}
 
-/// <summary>
-/// A template for each throwable item with a throwable type, 
-/// count and UI button associated with it.
-/// </summary>
-[Serializable]
-public class Throwable
-{
-    public string type;
-    public int count;
-    public Button button;
-
-    public Throwable(string tType, int tCount, Button tButton)
+    public ThrowableManager GetThrowable(string name)
     {
-        type = tType;
-        count = tCount;
-        button = tButton;
+        return throwables.Find(throwable => throwable.CompareName(name));
     }
 }

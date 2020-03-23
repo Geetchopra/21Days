@@ -13,7 +13,7 @@ public class ButtonScript : MonoBehaviour
     void Start()
     {
         button = GetComponent<Button>();
-        Throwables throwables = FindObjectOfType(typeof(Throwables)) as Throwables;
+        ThrowableActions throwables = FindObjectOfType(typeof(ThrowableActions)) as ThrowableActions;
         button.onClick.AddListener(delegate { throwables.Activate(buttonType); });
     }
 }
