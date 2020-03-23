@@ -7,13 +7,13 @@ using UnityEngine;
 /// </summary>
 public class MoveCamera : MonoBehaviour
 {
-    public float sensH = 2.0f;
-    public float sensV = 2.0f;
+    public static float sensH = 2.0f;
+    public static float sensV = 2.0f;
 
-    private float yaw = 0.0f;
-    private float pitch = 0.0f;
+    public static bool inputEnabled;
+    private float rotation;
 
-    private static bool inputEnabled;
+    private Quaternion originalRotation;
 
     /// <summary>
     /// Initialize private attributes.
@@ -23,18 +23,23 @@ public class MoveCamera : MonoBehaviour
         inputEnabled = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        originalRotation = transform.localRotation;
+        rotation = 0f;
     }
 
     /// <summary>
     /// Enable camera movement when the mouse moves. Also supports changing the sensitivity of the camera.
     /// </summary>
-    void LateUpdate()
+    void Update()
     {
         if (inputEnabled)
         {
-            yaw += sensH * Input.GetAxis("Mouse X");
-            pitch = Mathf.Clamp(pitch - (sensV * Input.GetAxis("Mouse Y")), -72f, 60f);
-            transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+            rotation += Input.GetAxis("Mouse Y") * sensV;
+            rotation = Mathf.Clamp(rotation, -60f, 60f);
+
+            Quaternion angle = Quaternion.AngleAxis(rotation, Vector3.left);
+            transform.localRotation = originalRotation * angle;
         }       
     }
 
