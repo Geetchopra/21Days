@@ -13,10 +13,19 @@ public class HitEnemy : MonoBehaviour
     /// <param name="collision">The collision object that this body collided with.</param>
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "AI")
+        if (collision.gameObject.CompareTag("AI"))
         {
             AIController controller = collision.gameObject.GetComponent<AIController>();
-            controller.Stun();
+            ThrowableManager throwable = GetComponent<ThrowableManager>();
+
+            if (throwable.HitEffect == Throwable.HitEffects.stun)
+                controller.Stun();
+            else if (throwable.HitEffect == Throwable.HitEffects.slow)
+                controller.Slow();
+            else if (throwable.HitEffect == Throwable.HitEffects.damage)
+                controller.Hit(throwable.Damage);
+            else if (throwable.HitEffect == Throwable.HitEffects.attract)
+                controller.Attract(gameObject);
         }
     }
 }

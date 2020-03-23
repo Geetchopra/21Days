@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityStandardAssets.Characters.ThirdPerson;
 
 /// <summary>
 /// The Enemy AI controller class. Contains logic to control the enemy movement and interactions.
@@ -20,7 +19,7 @@ public class AIController : MonoBehaviour
     private bool chasing;
     
     private GameObject player;
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
 
     //To monitor the time passed during certain interactions.
     private float time;
@@ -30,7 +29,9 @@ public class AIController : MonoBehaviour
     //To ensure synchronization of coroutines.
     private bool coroutines;
 
-    private Animator animator;
+    protected Animator animator;
+
+    private int health;
 
     /// <summary>
     /// Initialize private attributes of the AI.
@@ -46,6 +47,7 @@ public class AIController : MonoBehaviour
         currentWaypoint = 0;
         coroutines = false;
         agent.updateRotation = false;
+        health = 100;
     }
     
     /// <summary>
@@ -63,12 +65,14 @@ public class AIController : MonoBehaviour
         }
 
         //Check if the enemy encounters the player and change its state to chasing.
-        Vector3 direction = (player.transform.position - transform.position).normalized;
+        //Vector3 direction = (player.transform.position - transform.position).normalized;
+        Vector3 direction = transform.forward;
         Ray ray = new Ray(transform.position, direction);
 
         //Raycast to check if it hits the player within the triggerDistance.
-        if (Physics.Raycast(ray, out RaycastHit hit, triggerDistance))
+        if (Physics.SphereCast(ray, 3.0f, out RaycastHit hit, triggerDistance))
         {
+            Debug.DrawRay(ray.origin, ray.direction * triggerDistance, Color.red);
             if (hit.collider.gameObject == player && !chasing)
             {
                 Debug.Log("Be Seeing You");
@@ -97,7 +101,6 @@ public class AIController : MonoBehaviour
                 ChangeState();
             }
         }
-
     }
 
     /// <summary>
@@ -121,8 +124,6 @@ public class AIController : MonoBehaviour
             agent.speed = 1f;
             Move(position);
         }
-
-        
     }
 
     /// <summary>
@@ -130,36 +131,33 @@ public class AIController : MonoBehaviour
     /// </summary>
     IEnumerator ChangeWaypoint()
     {
-        //Ensure synchronization - if a couroutine is executing then wait for it to finish first.
-        if (coroutines)
-            yield break;
-
-        coroutines = true;
-
         yield return new WaitForSeconds(5.0f);
 
         currentWaypoint++;
 
         if (currentWaypoint >= waypoints.Length)
             currentWaypoint = 0;
-
-        coroutines = false;
     }
 
     /// <summary>
-    /// Stun the enemy, i.e. make it immovable for 5 seconds.
-    /// This is a container method for the coroutine pauseAndResume(), which contains the main logic.
-    /// This can be called by other objects when they collide with the enemy, i.e. when an item hits an enemy.
+    /// Move the enemy NavMeshAgent to the specified position
     /// </summary>
-    public void Stun()
+    /// <param name="position">The point to move the enemy to.</param>
+    void Move(Vector3 position)
     {
-        StartCoroutine(PauseAndResume());
+        agent.isStopped = false;
+        agent.SetDestination(position);
     }
 
-
     /// <summary>
-    /// Coroutine which pauses enemy movement for 5 seconds and then resumes.
+    /// Change the enemy state from walking to chasing or vice-versa.
     /// </summary>
+    void ChangeState()
+    {
+        walking = !walking;
+        chasing = !chasing;
+    }
+
     IEnumerator PauseAndResume()
     {
         //Ensure synchronization.
@@ -181,22 +179,53 @@ public class AIController : MonoBehaviour
         coroutines = false;
     }
 
-    /// <summary>
-    /// Move the enemy NavMeshAgent to the specified position
-    /// </summary>
-    /// <param name="position">The point to move the enemy to.</param>
-    void Move(Vector3 position)
+    IEnumerator SlowAndResume()
     {
-        agent.isStopped = false;
-        agent.SetDestination(position);
+        //Ensure synchronization.
+        if (coroutines)
+            yield break;
+
+        coroutines = true;
+
+        Debug.Log("Slowed!");
+        float originalSpeed = agent.speed;
+        //animator.SetBool("stun", true);
+        agent.speed /= 2f;
+
+        yield return new WaitForSeconds(5.0f);
+
+        Debug.Log("Normal");
+        //animator.SetBool("stun", false);
+        agent.speed = originalSpeed;
+
+        coroutines = false;
     }
 
-    /// <summary>
-    /// Change the enemy state from walking to chasing or vice-versa.
-    /// </summary>
-    void ChangeState()
+    public void Stun()
     {
-        walking = !walking;
-        chasing = !chasing;
+        StartCoroutine(PauseAndResume());
+    }
+
+    public void Slow()
+    {
+        StartCoroutine(SlowAndResume());
+    }
+
+    public void Hit(int damageAmount)
+    {
+        coroutines = true;
+        health -= damageAmount;
+        if (health <= 0)
+        {
+            animator.SetBool("dead", true);
+            agent.isStopped = true;
+            agent.speed = 0f;
+            Destroy(gameObject, 10f);
+        }
+    }
+
+    public void Attract(GameObject obj)
+    {
+
     }
 }
