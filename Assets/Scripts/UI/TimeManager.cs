@@ -38,27 +38,16 @@ public class TimeManager : MonoBehaviour
     void Update()
     {
         //Remove the text when the inventory pops up.
-        if (Input.GetKey(KeyCode.N))
-        {
-            time.enabled = false;
-        }
-        else
-        {
-            time.enabled = true;
-        }
+        time.enabled = !Input.GetKey(KeyCode.N);
 
         //Speed up the time when the player is walking.
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
             //Speed it up even more if the player is sprinting.
             if (Input.GetKey(KeyCode.LeftShift))
-            {
                 seconds -= Time.deltaTime * 40.0f;
-            }
             else
-            {
                 seconds -= Time.deltaTime * 20.0f;
-            }
         }
         else
         {
@@ -139,21 +128,13 @@ public class TimeManager : MonoBehaviour
     public static int ConvertSeconds(int time, Times toType)
     {
         if (toType == Times.days)
-        {
             return time * 86400;
-        }
         else if (toType == Times.hours)
-        {
             return time * 3600;
-        }
         else if (toType == Times.minutes)
-        {
             return time * 60;
-        }
         else
-        {
             return time;
-        }
     }
 
     /// <summary>
@@ -168,13 +149,9 @@ public class TimeManager : MonoBehaviour
 
         //Convert time to only seconds and add to current time.
         if (operation == Operations.add)
-        {
             currentTime += ConvertSeconds(timeAmount, type);
-        }
         else
-        {
             currentTime -= ConvertSeconds(timeAmount, type);
-        }
 
         //Get new time and update it accordingly.u
         Tuple<int, int, int, float> newTime = SplitTime(currentTime);
