@@ -4,6 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// Controls camera movement for the player.
+/// Only moves camera on its Y axis. X axis camera movement is 
+/// controlled by PlayerController by rotating the player accordingly.
 /// </summary>
 public class MoveCamera : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class MoveCamera : MonoBehaviour
 
     private Quaternion originalRotation;
 
+    public Light areaLight;
+
     /// <summary>
     /// Initialize private attributes.
     /// </summary>
@@ -23,7 +27,6 @@ public class MoveCamera : MonoBehaviour
         inputEnabled = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
         originalRotation = transform.localRotation;
         rotation = 0f;
     }
@@ -40,6 +43,7 @@ public class MoveCamera : MonoBehaviour
 
             Quaternion angle = Quaternion.AngleAxis(rotation, Vector3.left);
             transform.localRotation = originalRotation * angle;
+            areaLight.transform.localRotation = transform.localRotation;
         }       
     }
 

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Key Manager. Uses the Key object to manage interactions and
+/// inventory properties.
+/// </summary>
 public class KeyManager : MonoBehaviour
 {
     [SerializeField] private Key key;
@@ -17,30 +21,46 @@ public class KeyManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Called before the first frame update.
+    /// </summary>
     void Start()
     {
         prompt = GameObject.Find("Interactable Prompt").GetComponent<Text>();
     }
 
+    /// <summary>
+    /// Check if the key has been discovered by the player.
+    /// </summary>
+    /// <returns> True if the key has been found, else False. </returns>
     public bool Discovered()
     {
         return image != null;
     }
 
+    /// <summary>
+    /// Instantiate the key image to the inventory.
+    /// </summary>
     public void CreateImage()
     {
         image = Instantiate(key.image);
         image.transform.parent = GameObject.Find("Inventory/Keys").transform;
     }
 
+    /// <summary>
+    /// Set the enabled state of the key.
+    /// </summary>
+    /// <param name="displayState"> The state to set it active to. </param>
     public void SetImageActive(bool displayState)
     {
+        //Ensure image is not null, i.e. the key has to have been found first.
         if (image != null)
             image.enabled = displayState;
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Called once every frame.
+    /// </summary>
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -69,6 +89,9 @@ public class KeyManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroy the key object and update time accordingly.
+    /// </summary>
     void PickUp()
     {
         TimeManager.ChangeTime(key.costAmount, key.costType, TimeManager.Operations.subtract);

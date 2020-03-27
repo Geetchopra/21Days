@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Makes an item pickable using the respective keybind, currently E.
+/// Deprecated class. Not being used currently.
+/// Will change this to include collectibles.
 /// </summary>
 public class Pickable : MonoBehaviour
 {

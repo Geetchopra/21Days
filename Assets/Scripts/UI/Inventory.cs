@@ -5,14 +5,15 @@ using UnityEngine.UI;
 using System;
 
 /// <summary>
-/// UI manager for the keys in the inventory.
+/// UI manager for the different items in the inventory.
+/// Also contains a reference to all possible items available to the player.
 /// </summary>
 public class Inventory : MonoBehaviour
 {
-    //The throwable objects to be instantiated at runtime.
+    //The throwable objects to be instantiated.
     [SerializeField] private List<ThrowableManager> throwables = new List<ThrowableManager>();
 
-    //The Key objects to be instantiated at runtime.
+    //The Key objects to be instantiated.
     [SerializeField] public List<KeyManager> keys = new List<KeyManager>();
 
     /// <summary>
@@ -40,7 +41,7 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the active state of the keys in use and enable the cursor.
+    /// Set the active state of the items in use and enable the cursor.
     /// </summary>
     /// <param name="displayState"> The boolean parameter to set the display state to. </param>
     void SetActiveUI(bool displayState)
@@ -74,7 +75,7 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Update the button values based on the current inventory state.
+    /// Update the UI values based on the current inventory state.
     /// </summary>
     void UpdateUI()
     {
@@ -89,6 +90,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
+        //Only need to update keys if a new key has been found.
         foreach (KeyManager key in keys)
         {
             if (PlayerItems.Find("key", key.ID) && !key.Discovered())
@@ -98,6 +100,11 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get the ThrowableManager object of a specified name (type).
+    /// </summary>
+    /// <param name="name"> The type of object to return. </param>
+    /// <returns> ThrowableManager of type 'name'. </returns>
     public ThrowableManager GetThrowable(string name)
     {
         return throwables.Find(throwable => throwable.CompareName(name));

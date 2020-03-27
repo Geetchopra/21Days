@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Defines throwable actions. Attached to a player to 
+/// initiate throwing of different items.
+/// </summary>
 public class ThrowableActions : MonoBehaviour
 {
     private Text text;
@@ -11,31 +15,43 @@ public class ThrowableActions : MonoBehaviour
     [SerializeField] private Inventory inventory;
     [SerializeField] private Reticle reticle;
 
-    private bool activated;
+    //If any throwable is currently equipped
+    private bool isEquipped;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Called before the first frame update.
+    /// </summary>
     void Start()
     {
         text = GameObject.Find("Weapon Text").GetComponent<Text>();
-        activated = false;
+        isEquipped = false;
     }
 
+    /// <summary>
+    /// Activate or equip the throwable and make it ready for throwing.
+    /// </summary>
+    /// <param name="name"> The throwable type to equip. </param>
     public void Activate(string name)
     {
-        activated = true;
+        isEquipped = true;
         text.text = name + ": " + PlayerItems.GetThrowableCount(name);
         currentThrowable = inventory.GetThrowable(name);
     }
 
+    /// <summary>
+    /// Deactivate or unequip throwables.
+    /// </summary>
     public void Deactivate()
     {
-        activated = false;
+        isEquipped = false;
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Called once every frame.
+    /// </summary>
     void Update()
     {
-        if (activated && !Input.GetKey(KeyCode.N))
+        if (isEquipped && !Input.GetKey(KeyCode.N))
         {
             SetActiveUI(true);
 
@@ -44,6 +60,7 @@ public class ThrowableActions : MonoBehaviour
                 int remaining = currentThrowable.Throw();
                 text.text = currentThrowable.Name + ": " + remaining;
 
+                //No more throwables available of currentType.
                 if (remaining == 0)
                 {
                     string newType = PlayerItems.GetNextThrowable();
@@ -51,10 +68,11 @@ public class ThrowableActions : MonoBehaviour
                     if (newType == null)
                     {
                         //Unequip if no throwables available.
-                        activated = false;
+                        isEquipped = false;
                     }
                     else
                     {
+                        //Equip another throwable type.
                         currentThrowable = inventory.GetThrowable(newType);
                         text.text = newType + ": " + PlayerItems.GetThrowableCount(newType);
                     }
@@ -67,6 +85,10 @@ public class ThrowableActions : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the UI elements' active state.
+    /// </summary>
+    /// <param name="displayState"> True to enable it, False to disable it. </param>
     void SetActiveUI(bool displayState)
     {
         text.gameObject.SetActive(displayState);

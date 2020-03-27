@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Manages the time currency in the game. 
-/// Contains mostly static methods so that they can be called from other objects.
-/// Also contains functions to manipulate the time.
+/// Contains mostly static methods so that they can be called from other classes.
+/// Also contains functions and helper methods to manipulate the time.
 /// </summary>
 public class TimeManager : MonoBehaviour
 {
@@ -15,6 +15,8 @@ public class TimeManager : MonoBehaviour
     public static int minutes;
     public static int hours;
     public static int days;
+
+    //UI text object.
     private static Text time;
 
     public enum Times { days = 0, hours = 1, minutes = 2, seconds = 3 };
@@ -132,7 +134,7 @@ public class TimeManager : MonoBehaviour
     /// Convert seconds to clock days, minutes, hours or seconds.
     /// </summary>
     /// <param name="time"> The amount of seconds to convert from. </param>
-    /// <param name="toType"> Type of conversion, d for days, h for hours and so on. </param>
+    /// <param name="toType"> Type of conversion, days, minutes etc. </param>
     /// <returns> The converted time. </returns>
     public static int ConvertSeconds(int time, Times toType)
     {
@@ -158,7 +160,7 @@ public class TimeManager : MonoBehaviour
     /// Change the current time and update the UI.
     /// </summary>
     /// <param name="timeAmount"> Amount to be changed by. </param>
-    /// <param name="type"> Type of amount, d for days, h for hours and so on. </param>
+    /// <param name="type"> Type of conversion, days, minutes etc. </param>
     /// <param name="operation"> To check if time is to be added or subtracted. </param>
     public static void ChangeTime(int timeAmount, Times type, Operations operation)
     {
@@ -190,8 +192,8 @@ public class TimeManager : MonoBehaviour
     /// Used mainly for UI texts.
     /// </summary>
     /// <param name="amount"> The amount of time. </param>
-    /// <param name="type"> Type of amount, d for days, h for hours and so on. </param>
-    /// <returns></returns>
+    /// <param name="type"> Type of conversion, days, minutes etc. </param>
+    /// <returns> Parsed string from the entered parameters. </returns>
     public static string ParseTime(int amount, Times type)
     {
         string parsed;

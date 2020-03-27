@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerItems : MonoBehaviour
 {
-    private static List<string> keys = new List<string>();
+    private static List<int> keys = new List<int>();
     private static Dictionary<string, int> throwables = new Dictionary<string, int>();
 
     /// <summary>
@@ -58,7 +58,7 @@ public class PlayerItems : MonoBehaviour
     {
         if (type == "key")
         {
-            keys.Add(value);
+            keys.Add(Convert.ToInt32(value));
         }
         else if (type == "throwable")
         {
@@ -78,7 +78,7 @@ public class PlayerItems : MonoBehaviour
     {
         if (type == "key")
         {
-            keys.Remove(value);
+            keys.Remove(Convert.ToInt32(value));
         }
         else if (type == "throwable")
         {
@@ -98,7 +98,7 @@ public class PlayerItems : MonoBehaviour
     public static bool Find(string type, string value) 
     {
         if (type == "key")
-            return keys.Exists(x => x == value);
+            return keys.Exists(x => x == Convert.ToInt32(value));
         else if (type == "throwable")
             return throwables.ContainsKey(value);
         else
